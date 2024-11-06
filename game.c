@@ -154,7 +154,7 @@ void mainDraw() {
         int main_hand_x = 20;
         int main_hand_y = 10;
         gotoxy(main_hand_x, main_hand_y);
-        printf(" ! ~~~~~~~~~~~~~~~~~~~~~~                ~~~~~ ,!!,\n");
+        printf(" ! ~~~~~~~~~~~~~~~~~~~~~~                ,,,,, ,!!,\n");
         gotoxy(main_hand_x, main_hand_y+1);
         printf(" ,:~                                     ~     ~,. \n");
         gotoxy(main_hand_x, main_hand_y+2);
