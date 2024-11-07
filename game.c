@@ -21,7 +21,7 @@ int keyControl() {
     else if (temp == ' ') { //스페이스바(공백)
         a = (a == 0) ? 1 : 0; // 명확한 상태 전환
         //system("cls"); // 화면 깔끔하게 지우기
-        mainDraw(); // 상태가 변경될 때마다 화면 갱신
+        mainDraw(); // 상태가 변경될 때마다 화면 갱신 //
         return SUBMIT;
     }
 }
