@@ -100,7 +100,7 @@ void infoDraw() {
         }
     }
 }
-//
+
 
 int see = 0;
 void random() {
