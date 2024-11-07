@@ -20,6 +20,10 @@ void loveGauge();
 void titleDraw();
 int menuDraw();
 void infoDraw();
+void girlfriend_back();
+void girlfriend_see();
+void random();
+void randomtime();
 
 //게임 실행
 void start();

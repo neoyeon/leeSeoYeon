@@ -101,6 +101,49 @@ void infoDraw() {
     }
 }
 
+
+int see = 0;
+void random() {
+    srand(time(NULL)); // 난수 초기화
+    //maindraw();
+    while (1) { // 무한 루프
+
+        int random_function = rand() % 2; // 0 또는 1 랜덤 선택
+        if (random_function == 0) {
+            girlfriend_back();
+
+
+        }
+        else {
+            girlfriend_see();
+        }
+        keyControl(); // 사용자 입력을 받기 위해 호출
+        randomtime();
+        mainDraw();
+
+        // a와 see의 값이 같다면 종료   
+        randomtime();
+        if (a == see) {
+            break; // 조건이 만족되면 루프 종료
+        }
+
+    }
+
+    printf("들켰다!\n");
+
+}
+
+void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
+{
+    //maindraw();
+    int sleep_time = rand() % 5 + 1; // 1초에서 5초 사이의 랜덤 값
+#ifdef _WIN32
+    Sleep(sleep_time * 1000); // Windows의 경우
+#else
+    sleep(sleep_time); // POSIX 시스템의 경우
+#endif
+}
+
 //메인화면 출력하기
 void mainDraw() {
     if (a == 1) {
@@ -228,9 +271,59 @@ void mainDraw() {
         printf("     ~,, $                                   ,,              ! =                                \n");
         printf("................................................................................................\n");
         */
+        random();
         }
 }
+//여자친구 뒷모습 출력 함수
+void girlfriend_back() {
 
+    gotoxy(27, 1);
+    printf("       ,~.   \n");
+    gotoxy(27, 2);
+    printf("      . ! ;   \n");
+    gotoxy(27, 3);
+    printf("    .*,..*.=   \n");
+    gotoxy(27, 4);
+    printf("  ,-        ~..~\n");
+    gotoxy(27, 5);
+    printf(" ;   /          !~\n");
+    gotoxy(27, 6);
+    printf(" =   =       ., \n");
+    gotoxy(27, 7);
+    printf(" l           .~ \n");
+    gotoxy(27, 8);
+    printf(" .          .- \n");
+    gotoxy(27, 9);
+    printf("   *,.,=.   \n");
+    gotoxy(27, 10);
+    printf(" ~~~:~~~~$~~~\n");
+}
+
+void girlfriend_see() {
+    see = 1;
+
+    gotoxy(27, 1);
+    printf("       ,~.   \n");
+    gotoxy(27, 2);
+    printf("      . ! ;   \n");
+    gotoxy(27, 3);
+    printf("    .*,..*.=   \n");
+    gotoxy(27, 4);
+    printf("  ,-        ~..~\n");
+    gotoxy(27, 5);
+    printf(" ;              !~\n");
+    gotoxy(27, 6);
+    printf("             ., \n");
+    gotoxy(27, 7);
+    printf(" l           .~ \n");
+    gotoxy(27, 8);
+    printf(" .          .- \n");
+    gotoxy(27, 9);
+    printf("   *,.,=.   \n");
+    gotoxy(27, 10);
+    printf(" ~~~:~~~~$~~~\n");
+
+}
 
 // 게이지 구현
 void loveGauge() {

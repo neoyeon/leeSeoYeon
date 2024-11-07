@@ -13,3 +13,5 @@
 
 #endif
 
+#include <time.h>
+#include <stdlib.h>
