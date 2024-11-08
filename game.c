@@ -2,30 +2,66 @@
 
 //전역변수로 손잡기 상태 추가
 int a = 0; // 0: 손 안잡기, 1: 손잡기
+int see = 0;  // 전역변수로 여자친구가 보고 있는지 상태 저장
 
-//키 조종
 int keyControl() {
-    char temp = getch();
-    if (temp == 'w' || temp == 'W') {
-        return UP;
+    if (kbhit()) {
+        char temp = getch();
+        if (temp == ' ') { // 스페이스바 입력 처리를 최우선으로
+            a = !a;
+            system("cls");
+            mainDraw();
+            loveGauge();
+            return SUBMIT;
+        }
+        else if (temp == 'w' || temp == 'W') {
+            return UP;
+        }
+        else if (temp == 'a' || temp == 'A') {
+            return LEFT;
+        }
+        else if (temp == 's' || temp == 'S') {
+            return DOWN;
+        }
+        else if (temp == 'd' || temp == 'D') {
+            return RIGHT;
+        }
     }
-    else if (temp == 'a' || temp == 'A') {
-        return LEFT;
-    }
-    else if (temp == 's' || temp == 'S') {
-        return DOWN;
-    }
-    else if (temp == 'd' || temp == 'D') {
-        return RIGHT;
-    }
-    else if (temp == ' ') { //스페이스바(공백)
-        a = (a == 0) ? 1 : 0; // 명확한 상태 전환
-        //system("cls"); // 화면 깔끔하게 지우기
-        mainDraw(); // 상태가 변경될 때마다 화면 갱신 //
-        return SUBMIT;
-    }
+    return 0;
 }
 
+// 게임 실행 함수들 //
+void start() { //시작화면
+    while (1) {
+        titleDraw();
+        int menuCode = menuDraw();
+        if (menuCode == 0) {
+            mainScreen();
+            return 0;
+        }
+        else if (menuCode == 1) {
+            infoDraw(); // 게임정보  
+        }
+        else if (menuCode == 2) {
+            return 0; // 종료
+        }
+        system("cls");
+    }
+    return 0;
+}
+
+void mainScreen() { //메인게임
+    while (1)
+    {
+        mainDraw();
+        loveGauge();
+        int n = keyControl();
+        if (n == SUBMIT) {
+            return 0;
+        }
+    }
+    return 0;
+}
 
 void titleDraw() {
     printf("\n\n\n\n");
@@ -83,7 +119,6 @@ int menuDraw() {
     }
 }
 
-
 void infoDraw() {
     system("cls");
     printf("\n\n");
@@ -100,107 +135,46 @@ void infoDraw() {
         }
     }
 }
-//
 
-int see = 0;
-void random() {
-    srand(time(NULL)); // 난수 초기화
-    //maindraw();
-    while (1) { // 무한 루프
-
-        int random_function = rand() % 2; // 0 또는 1 랜덤 선택
-        if (random_function == 0) {
-            girlfriend_back();
-
-
-        }
-        else {
-            girlfriend_see();
-        }
-        keyControl(); // 사용자 입력을 받기 위해 호출
-        randomtime();
-        mainDraw();
-
-        // a와 see의 값이 같다면 종료   
-        randomtime();
-        if (a == see) {
-            break; // 조건이 만족되면 루프 종료
-        }
-
-    }
-
-    printf("들켰다!\n");
-
-}
-
-void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
-{
-    //maindraw();
-    int sleep_time = rand() % 5 + 1; // 1초에서 5초 사이의 랜덤 값
-#ifdef _WIN32
-    Sleep(sleep_time * 1000); // Windows의 경우
-#else
-    sleep(sleep_time); // POSIX 시스템의 경우
-#endif
-}
-
-//메인화면 출력하기
 void mainDraw() {
-    if (a == 1) {
-        // 손잡기 상태일 때 출력할 내용
-        //printf("현재 상태: 손잡기\n");
-        a = 1;
-        //printf("\033[H\033[J"); // 콘솔 화면 지우기 (ANSI 코드)
-        //system("cls");
+    // 항상 배경 먼저 그리기
+    system("cls");
 
-        //콘솔화면보다 출력그림이 많아서 위아래 잘랐음. 추후 수정 필요
-        /*
-        printf("................................................................................................\n");
-        printf("................................................................................................\n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        
-        printf("                                                                                                \n");
-        printf("                                   ,~.                            ~:,     ,:~.                  \n");
-        printf("                                 . ! ;                          ~   :!.*-;~   -.               \n");
-        printf("             ,...,             .*,..*.=                         .     .- .      .              \n");
-        printf("           ;         :       ,-       ~..~                     .     -. .~!     $                \n");
-        printf("          ~         .:      ;         !~                           .:     .::   $               \n");
-        printf("          ~          #      =         .,                        - ~;         =, $               \n");
-        printf("          ,          $      -         .~                        ; -          .; $               \n");
-        printf("          -          #      !         .-                        *..          .-.*               \n");
-        printf("             ~,:.*             *,.,=.                                :! =.!,                    \n");
-        printf("    -~~~~~~~=~~:~~=~~~~~~~~~~~~:~~~~$~~~~~~~~-.             :,,,,,,=,,-----,,,.............,,,,,\n");
-        printf("    *                                        .,              ~                                  \n");
-        printf("    * !,                                   ;, .              ~                                . \n");
-        printf("    * ~.                                   ;- '              ~                                . \n");
-        printf("    *                                         '             .=                                . \n");
-        printf("    * -                                    -: '             ~                                 . \n");
-        printf("    * =                                    ,,!=             ,                                 . \n");
-        printf("    ::::::::::::::::::::::::::::::::::::;;!;::               :::::::::::::::::::::::::::::::::. \n");
-        printf("     ;  !$     -=~.            -,.--     ;:  ;                ; : .    ;--;                   . \n");
-        printf("     *****!*********!!!!!!!!!!!*****!!!******=,              ;..:.~.....,~..............,,,,,,, \n");
-        printf("     ========================================$,              ================================== \n");
-        printf("     ~,, ~                                   ,,              !!$                                \n");
-        */
-        /*
-        printf("     ~,, $                                   ,,              ! =                                \n");
-        printf("     ~,, $                                   ,,              ! =                                \n");
-        printf("................................................................................................\n");
-        */
-       
-       
+    // 기본 배경 그리기
+    printf("                                                                                                \n");
+    printf("                                                                   ~:,     ,:~.                  \n");
+    printf("                                                                 ~    :,  -;   -.               \n");
+    printf("             ,...,,                                             .      .- .      .              \n");
+    printf("           ;        :                                           .     -. .~!     $                \n");
+    printf("          ~          :                                         *   .:       ::   $               \n");
+    printf("          ~          #                                          - ~;         =, $               \n");
+    printf("          ,          $                                          ;  -         ;. $               \n");
+    printf("          -         #                                            .. '       '.-.*               \n");
+    printf("             ~,:.*                                                   :! =.!,                    \n");
+    printf("    -~~~~~~~=~~:~~=~~~~~~~~~~~~:~~~~$~~~~~~~~-.             :,,,,,,=,,-----,,,.............,,,, \n");
+    printf("    *                                         ,              ~                                . \n");
+    printf("    *                                         .              ~                                . \n");
+    printf("    *                                         '              ~                                . \n");
+    printf("    *                                         '             .=                                . \n");
+    printf("    *                                         '             ~                                 . \n");
+    printf("    *                                      ,,!=             ,                                 . \n");
+    printf("    ::::::::::::::::::::::::::::::::::::;;!;::               :::::::::::::::::::::::::::::::::. \n");
+    printf("     ;  !$     -=~.            -,.--     ;:  ;                ; : .    ;--;                   . \n");
+    printf("     *****!*********!!!!!!!!!!!*****!!!******=,              ;..:.~.....,~..............,,,,,,, \n");
+    printf("     ========================================$,              ================================== \n");
+    printf("     ~,, ~                                   ,,              !!$                                \n");
+
+
+    if (a == 1) {
+        // 손잡기 상태일 때 추가로 손과 하트 그리기
         //손의 좌표와 출력
         int main_hand_x = 20;
         int main_hand_y = 10;
         gotoxy(main_hand_x, main_hand_y);
         printf(" ! ~~~~~~~~~~~~~~~~~~~~~~                ,,,,, ,!!,\n");
-        gotoxy(main_hand_x, main_hand_y+1);
+        gotoxy(main_hand_x, main_hand_y + 1);
         printf(" ,:~                                     ~     ~,. \n");
-        gotoxy(main_hand_x, main_hand_y+2);
+        gotoxy(main_hand_x, main_hand_y + 2);
         printf("  -$..                                   ,@.$-     \n");
         gotoxy(main_hand_x, main_hand_y + 3);
         printf("    .-,!!                              .=;-,       \n");
@@ -209,13 +183,12 @@ void mainDraw() {
         gotoxy(main_hand_x, main_hand_y + 5);
         printf("            ...~==...,,!===;......---~,            \n");
 
-
         // 하트의 좌표와 출력
         int main_heart_x = 40;
         int main_heart_y = 7;
         gotoxy(main_heart_x, main_heart_y);
         printf("    &&     &&    \n");
-        gotoxy(main_heart_x, main_heart_y+1);
+        gotoxy(main_heart_x, main_heart_y + 1);
         printf("  &!!!!& &!!!!&  \n");
         gotoxy(main_heart_x, main_heart_y + 2);
         printf("&!!!!!!!&!!!!!!!&\n");
@@ -228,54 +201,79 @@ void mainDraw() {
         gotoxy(main_heart_x, main_heart_y + 6);
         printf("        &        \n");
 
+        // 여자친구의 모습을 계속 그리기
+        if (see == 1) {
+            girlfriend_see();
+            random();// 여자친구가 앞을 보고 있는 경우
+        }
+        else {
+            girlfriend_back();
+            random();// 여자친구가 뒤돌아본 경우
+        }
     }
     else {
-        // 손 안잡기 상태일 때 출력할 내용
-        //printf("현재 상태: 손 안잡기\n");
-        //printf("\033[H\033[J"); // 콘솔 화면 지우기 (ANSI 코드)
-        system("cls");
-
-        /*
-        printf("................................................................................................\n");
-        printf("................................................................................................\n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        printf("                                                                                                \n");
-        */
-        printf("                                                                                                \n");
-        printf("                                   ,~.                            ~:,     ,:~.                  \n");
-        printf("                                 . ! ;                          ~   :!.*-;~   -.               \n");
-        printf("             ,...,             .*,..*.=                         .     .- .      .              \n");
-        printf("           ;         :       ,-       ~..~                     .     -. .~!     $                \n");
-        printf("          ~         .:      ;         !~                           .:     .::   $               \n");
-        printf("          ~          #      =         .,                        - ~;         =, $               \n");
-        printf("          ,          $      -         .~                        ; -          .; $               \n");
-        printf("          -          #      !         .-                        *..          .-.*               \n");
-        printf("             ~,:.*             *,.,=.                                :! =.!,                    \n");
-        printf("    -~~~~~~~=~~:~~=~~~~~~~~~~~~:~~~~$~~~~~~~~-.             :,,,,,,=,,-----,,,.............,,,,,\n");
-        printf("    *                                         ,              ~                                  \n");
-        printf("    *                                         .              ~                                . \n");
-        printf("    *                                         '              ~                                . \n");
-        printf("    *                                         '             .=                                . \n");
-        printf("    *                                         '             ~                                 . \n");
-        printf("    *                                      ,,!=             ,                                 . \n");
-        printf("    ::::::::::::::::::::::::::::::::::::;;!;::               :::::::::::::::::::::::::::::::::. \n");
-        printf("     ;  !$     -=~.            -,.--     ;:  ;                ; : .    ;--;                   . \n");
-        printf("     *****!*********!!!!!!!!!!!*****!!!******=,              ;..:.~.....,~..............,,,,,,, \n");
-        printf("     ========================================$,              ================================== \n");
-        printf("     ~,, ~                                   ,,              !!$                                \n");
-        /*
-        printf("     ~,, $                                   ,,              ! =                                \n");
-        printf("     ~,, $                                   ,,              ! =                                \n");
-        printf("................................................................................................\n");
-        */
+        // 손 안잡기 상태일 때는 random() 함수 호출
         random();
-        }
+    }
 }
-//여자친구 뒷모습 출력 함수
+
+
+void random() {
+    srand(time(NULL));  // 난수 초기화
+    while (1) {
+        // 0 또는 1 랜덤 선택 (0: 뒤돌아봄, 1: 앞을 봄)
+        int random_function = rand() % 2;
+        if (random_function == 0) {
+            see = 0;  // 뒤돌아본 상태
+            girlfriend_back();
+            randomtime(1);  // 뒤돌아본 상태에서의 대기 시간
+        }
+        else {
+            see = 1;  // 앞을 보는 상태
+            girlfriend_see();
+            randomtime(0);  // 앞을 보는 상태에서의 대기 시간
+        }
+
+        // 게임 오버 조건 체크 (손을 잡고 있는데 여자친구가 보고 있으면)
+        if (a == 1 && see == 1) {
+            system("cls");
+            gotoxy(40, 15);  // 화면 중앙에 표시
+            printf("들켰다!\n");
+            Sleep(2000);  // 2초 대기
+            break;
+        }
+
+        // 키 입력 체크
+        if (kbhit()) {
+            keyControl();
+        }
+    }
+}
+
+void randomtime(int is_looking_back)
+{
+    int sleep_time;
+    if (is_looking_back) {
+        // 뒤돌아본 상태일 때는 1~3초 동안 유지
+        sleep_time = (rand() % 2000) + 1000;  // 1000ms(1초) ~ 3000ms(3초)
+    }
+    else {
+        // 앞을 보고 있을 때는 2~6초 후에 뒤돌아봄
+        sleep_time = (rand() % 4000) + 2000;  // 2000ms(2초) ~ 6000ms(6초)
+    }
+#ifdef _WIN32
+    Sleep(sleep_time);
+#else
+    sleep(sleep_time);
+#endif
+}
+
+// 여자친구 뒷모습 함수 수정
 void girlfriend_back() {
+    // 기존 좌표에 그리기 전에 해당 영역 지우기
+    for (int i = 1; i <= 10; i++) {
+        gotoxy(27, i);
+    }
 
     gotoxy(27, 1);
     printf("       ,~.   \n");
@@ -286,7 +284,7 @@ void girlfriend_back() {
     gotoxy(27, 4);
     printf("  ,-        ~..~\n");
     gotoxy(27, 5);
-    printf(" ;   /          !~\n");
+    printf(" ;   /         !~\n");
     gotoxy(27, 6);
     printf(" =   =       ., \n");
     gotoxy(27, 7);
@@ -299,8 +297,12 @@ void girlfriend_back() {
     printf(" ~~~:~~~~$~~~\n");
 }
 
+// 여자친구가 보는 모습 함수 수정
 void girlfriend_see() {
-    see = 1;
+    // 기존 좌표에 그리기 전에 해당 영역 지우기
+    for (int i = 1; i <= 10; i++) {
+        gotoxy(27, i);
+    }
 
     gotoxy(27, 1);
     printf("       ,~.   \n");
@@ -311,9 +313,9 @@ void girlfriend_see() {
     gotoxy(27, 4);
     printf("  ,-        ~..~\n");
     gotoxy(27, 5);
-    printf(" ;              !~\n");
+    printf(" ;             !~\n");
     gotoxy(27, 6);
-    printf("             ., \n");
+    printf("            ., \n");
     gotoxy(27, 7);
     printf(" l           .~ \n");
     gotoxy(27, 8);
@@ -322,9 +324,7 @@ void girlfriend_see() {
     printf("   *,.,=.   \n");
     gotoxy(27, 10);
     printf(" ~~~:~~~~$~~~\n");
-
 }
-
 // 게이지 구현
 void loveGauge() {
     int x = 10; // 게이지 위치 x
@@ -344,7 +344,7 @@ void loveGauge() {
 
         // 게이지 업데이트
         gotoxy(x, y);
-        printf("                                                                                "); // 게이지 초기화
+        //printf("                                                                                "); // 게이지 초기화
 
         if (a == 1) {
             // 손잡기 상태일 때 게이지 증가
@@ -379,38 +379,4 @@ void loveGauge() {
 
         Sleep(300); // 게이지 변화 속도를 더 천천히
     }
-}
-
-
-
-// 게임 실행 함수들 //
-void start() { //시작화면
-    while (1) {
-        titleDraw();
-        int menuCode = menuDraw();
-        if (menuCode == 0) {
-            return 0;
-        }
-        else if (menuCode == 1) {
-            infoDraw(); // 게임정보  
-        }
-        else if (menuCode == 2) {
-            return 0; // 종료
-        }
-        system("cls");
-    }
-    return 0;
-}
-
-void mainScreen() { //메인게임
-    while (1)
-    {
-        mainDraw();
-        loveGauge();
-        int n = keyControl();
-        if (n == SUBMIT) {
-            return 0;
-        }
-    }
-    return 0;
 }
