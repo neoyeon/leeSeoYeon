@@ -162,7 +162,7 @@ void mainDraw() {
         printf("                                                                                                \n");
         printf("                                                                                                \n");
         
-         printf("                                                                                                \n");
+         printf("                                                                                               \n");
         printf("                                   ,~.                            .:,     ,:~.                  \n");
         printf("                                   ! ;                          .   :!.*.;~   -.                \n");
         printf("             .***.            .*****=                        .     .- .      .                  \n");//머리 리본 수정 필요
