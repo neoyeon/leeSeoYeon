@@ -100,8 +100,6 @@ void infoDraw() {
     }
 }
 
-
-<<<<<<< HEAD
 int random_function;
 int see = 0;
 void random() {
@@ -159,9 +157,6 @@ void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
 #endif
 <<<<<<< HEAD
 }*/
-=======
-}
->>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
 
 //메인화면 출력하기
 void mainDraw() {
@@ -426,7 +421,7 @@ void mainScreen() { //메인게임
     while (1)
     {
         mainDraw();
-<<<<<<< HEAD
+
         girlfriend_back();
         random();
         if (random_function == 0) {
@@ -439,8 +434,8 @@ void mainScreen() { //메인게임
         if (a == see) {
             break; // 조건이 만족되면 루프 종료           
         }
-=======
->>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
+
+
         loveGauge();
         int n = keyControl();
         if (n == SUBMIT) {
