@@ -1,7 +1,7 @@
 #include "game.h"
 
 //전역변수로 손잡기 상태 추가
-int a = 0; // 0: 손 안잡기, 1: 손잡기
+int a = 1; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해 초기값 1로 설정.
 
 //키 조종
 int keyControl() {
@@ -99,7 +99,7 @@ void infoDraw() {
         }
     }
 }
-//
+
 
 int see = 0;
 void random() {
@@ -161,6 +161,29 @@ void mainDraw() {
         printf("                                                                                                \n");
         printf("                                                                                                \n");
         printf("                                                                                                \n");
+
+        printf("                                                                                                \n");
+        printf("                                   ,~.                            ~:,     ,:~.                  \n");
+        printf("                                 . ! ;                          ~   :!.*-;~   -.               \n");
+        printf("             ,...,             .*,..*.=                         .     .- .      .              \n");
+        printf("           ;         :       ,-       ~..~                     .     -. .~!     $                \n");
+        printf("          ~         .:      ;         !~                           .:     .::   $               \n");
+        printf("          ~          #      =         .,                        - ~;         =, $               \n");
+        printf("          ,          $      -         .~                        ; -          .; $               \n");
+        printf("          -          #      !         .-                        *..          .-.*               \n");
+        printf("             ~,:.*             *,.,=.                                :! =.!,                    \n");
+        printf("    -~~~~~~~=~~:~~=~~~~~~~~~~~~:~~~~$~~~~~~~~-.             :,,,,,,=,,-----,,,.............,,,,,\n");
+        printf("    *                                        .,              ~                                  \n");
+        printf("    * !,                                   ;, .              ~                                . \n");
+        printf("    * ~.                                   ;- '              ~                                . \n");
+        printf("    *                                         '             .=                                . \n");
+        printf("    * -                                    -: '             ~                                 . \n");
+        printf("    * =                                    ,,!=             ,                                 . \n");
+        printf("    ::::::::::::::::::::::::::::::::::::;;!;::               :::::::::::::::::::::::::::::::::. \n");
+        printf("     ;  !$     -=~.            -,.--     ;:  ;                ; : .    ;--;                   . \n");
+        printf("     *****!*********!!!!!!!!!!!*****!!!******=,              ;..:.~.....,~..............,,,,,,, \n");
+        printf("     ========================================$,              ================================== \n");
+        printf("     ~,, ~                                   ,,              !!$                                \n");
         
          printf("                                                                                               \n");
         printf("                                   ,~.                            .:,     ,:~.                  \n");
@@ -190,16 +213,16 @@ void mainDraw() {
         printf("     ~,, $                                   ,,              ! =                                \n");
         printf("................................................................................................\n");
         */
-       
-       
+
+
         //손의 좌표와 출력
         int main_hand_x = 20;
         int main_hand_y = 10;
         gotoxy(main_hand_x, main_hand_y);
         printf(" ! ~~~~~~~~~~~~~~~~~~~~~~                ,,,,, ,!!,\n");
-        gotoxy(main_hand_x, main_hand_y+1);
+        gotoxy(main_hand_x, main_hand_y + 1);
         printf(" ,:~                                     ~     ~,. \n");
-        gotoxy(main_hand_x, main_hand_y+2);
+        gotoxy(main_hand_x, main_hand_y + 2);
         printf("  -$..                                   ,@.$-     \n");
         gotoxy(main_hand_x, main_hand_y + 3);
         printf("    .-,!!                              .=;-,       \n");
@@ -214,7 +237,7 @@ void mainDraw() {
         int main_heart_y = 7;
         gotoxy(main_heart_x, main_heart_y);
         printf("    &&     &&    \n");
-        gotoxy(main_heart_x, main_heart_y+1);
+        gotoxy(main_heart_x, main_heart_y + 1);
         printf("  &!!!!& &!!!!&  \n");
         gotoxy(main_heart_x, main_heart_y + 2);
         printf("&!!!!!!!&!!!!!!!&\n");
@@ -270,8 +293,8 @@ void mainDraw() {
         printf("     ~,, $                                   ,,              ! =                                \n");
         printf("................................................................................................\n");
         */
-        random();
-        }
+        //random();
+    }
 }
 //여자친구 뒷모습 출력 함수
 void girlfriend_back() {
