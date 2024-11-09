@@ -107,7 +107,6 @@ void random() {
     random_function = rand() % 3;// }
 }
         /* a와 see의 값이 같다면 종료   
-=======
 int see = 0;
 void random() {
     srand(time(NULL)); // 난수 초기화
@@ -128,7 +127,6 @@ void random() {
         mainDraw();
 
         // a와 see의 값이 같다면 종료   
->>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
         randomtime();
         if (a == see) {
             break; // 조건이 만족되면 루프 종료
@@ -137,16 +135,12 @@ void random() {
     }
 
     printf("들켰다!\n");
-
-<<<<<<< HEAD
 }*/
 
 /*void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
-=======
 }
 
 void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
->>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
 {
     //maindraw();
     int sleep_time = rand() % 5 + 1; // 1초에서 5초 사이의 랜덤 값
@@ -155,7 +149,6 @@ void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
 #else
     sleep(sleep_time); // POSIX 시스템의 경우
 #endif
-<<<<<<< HEAD
 }*/
 
 //메인화면 출력하기
