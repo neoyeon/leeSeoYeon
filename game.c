@@ -101,6 +101,7 @@ void infoDraw() {
 }
 
 
+<<<<<<< HEAD
 int random_function;
 int see = 0;
 void random() {
@@ -108,6 +109,28 @@ void random() {
     random_function = rand() % 3;// }
 }
         /* a와 see의 값이 같다면 종료   
+=======
+int see = 0;
+void random() {
+    srand(time(NULL)); // 난수 초기화
+    //maindraw();
+    while (1) { // 무한 루프
+
+        int random_function = rand() % 2; // 0 또는 1 랜덤 선택
+        if (random_function == 0) {
+            girlfriend_back();
+
+
+        }
+        else {
+            girlfriend_see();
+        }
+        keyControl(); // 사용자 입력을 받기 위해 호출
+        randomtime();
+        mainDraw();
+
+        // a와 see의 값이 같다면 종료   
+>>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
         randomtime();
         if (a == see) {
             break; // 조건이 만족되면 루프 종료
@@ -117,9 +140,15 @@ void random() {
 
     printf("들켰다!\n");
 
+<<<<<<< HEAD
 }*/
 
 /*void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
+=======
+}
+
+void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
+>>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
 {
     //maindraw();
     int sleep_time = rand() % 5 + 1; // 1초에서 5초 사이의 랜덤 값
@@ -128,7 +157,11 @@ void random() {
 #else
     sleep(sleep_time); // POSIX 시스템의 경우
 #endif
+<<<<<<< HEAD
 }*/
+=======
+}
+>>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
 
 //메인화면 출력하기
 void mainDraw() {
@@ -393,6 +426,7 @@ void mainScreen() { //메인게임
     while (1)
     {
         mainDraw();
+<<<<<<< HEAD
         girlfriend_back();
         random();
         if (random_function == 0) {
@@ -405,6 +439,8 @@ void mainScreen() { //메인게임
         if (a == see) {
             break; // 조건이 만족되면 루프 종료           
         }
+=======
+>>>>>>> 8656fea140a1a26669f44a21893b4fbe13474be4
         loveGauge();
         int n = keyControl();
         if (n == SUBMIT) {
