@@ -1,7 +1,22 @@
 #include "game.h"
+#include "header.h"
 
 //전역변수로 손잡기 상태 추가
 int a = 1; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해 초기값 1로 설정.
+int random_function = 0; //난수의 나머지
+
+// 그래픽 요소를 표현하기 위한 구조체
+typedef struct {
+    Vector3* points;
+    int num_points;
+    const char* symbol;
+} GraphicElement;
+
+// 화면 좌표로 변환하는 함수
+void transformAndDraw(Vector3* point, Matrix3x3 transform) {
+    Vector3 transformed = multiply_matrix_vector(transform, *point);
+    gotoxy((int)transformed.x, (int)transformed.y);
+}
 
 //키 조종
 int keyControl() {
@@ -132,163 +147,174 @@ void random() {
 
 }*/
 
-int random_function = 0; //난수의 나머지
 
-void random() { //이서연이 손 봤는데 수정 ㅈㄴ필요함
-    srand(time(NULL)); // 난수 초기화
+// 하트 그리기 함수
+void drawHeart(int base_x, int base_y, float scale, float rotation) {
+    Matrix3x3 transform = identity_matrix();
+    transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
+    transform = multiply_matrices(transform, scale_matrix(scale, scale));
+    transform = multiply_matrices(transform, rotation_matrix(rotation));
 
-    random_function = rand() % 100; // 0 또는 1 또는 2 중 랜덤 선택
+    const char* heart[] = {
+        "    &&     &&    ",
+        "  &!!!!& &!!!!&  ",
+        "&!!!!!!!&!!!!!!!&",
+        "  &!!!!!!!!!!!&  ",
+        "    &!!!!!!!&    ",
+        "       &!&       ",
+        "        &        "
+    };
 
-    if (random_function == 0) {
+    for (int i = 0; i < 7; i++) {
+        Vector3 pos = { 0, i, 1 };
+        Vector3 transformed = multiply_matrix_vector(transform, pos);
+        gotoxy((int)transformed.x, (int)transformed.y);
+        puts(heart[i]);
+    }
+}
+
+// 손 그리기 함수
+void drawHand(float base_x, float base_y, float scale) {
+    Matrix3x3 transform = identity_matrix();
+    transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
+    transform = multiply_matrices(transform, scale_matrix(scale, scale));
+
+    const char* hand[] = {
+        " ! ~~~~~~~~~~~~~~~~~~~~~~                ,,,,, ,!!,",
+        " ,:~                                     ~     ~,. ",
+        "  -$..                                   ,@.$-     ",
+        "    .-,!!                              .=;-,       ",
+        "        -*~.--.                ,,,**.~~            ",
+        "            ...~==...,,!===;......---~,            "
+    };
+
+    for (int i = 0; i < 6; i++) {
+        Vector3 pos = { 0, i, 1 };
+        Vector3 transformed = multiply_matrix_vector(transform, pos);
+        gotoxy((int)transformed.x, (int)transformed.y);
+        puts(hand[i]);
+    }
+}
+
+// 배경 그리기 함수
+void drawBackground() {
+    const char* background[] = {
+        "                                                                                               ",
+        "                                                                 .:,     ,:~.                  ",
+        "                                                               .   :!.*.;~   -.                ",
+        "             .***.                                             .     .- .      .               ",
+        "          *         *                                         .    .  -   .   .                ",
+        "         .           .                                                                         ",
+        "         *           *                                        *               *                ",
+        "           *       *                                            *            *                 ",
+        "              ***                                                   *    *                     ",
+        "             ..:..                                                   ..:..                     ",
+        "    -~~~~~~~$~~:~~$~~~~~~~~~~~~~~~~~~~~~~~~~~-              -~~~~~~$~~~:~~~$~~~~~~~~~~~~~~~~~~~~",
+        "    *                                        *              *                                   ",
+        "    *                                        *              *                                   ",
+        "    *                                        *              *                                   ",
+        "    *                                        *              *                                   ",
+        "    *                                        *              *                                   ",
+        "    *                                        *              *                                   ",
+        "    ::::::::::::::::::::::::::::::::::::::::::              ::::::::::::::::::::::::::::::::::: ",
+        "     *      !!!!!!!!         !!!!!!!!       *                *     !!!!!!!!                     ",
+        "    ******************************************              *********************************** ",
+        "    ==========================================              ====================================",
+        "     ::::                                ::::                ::::                               "
+    };
+
+    // 배경 출력
+    for (int i = 0; i < 22; i++) {
+        gotoxy(0, i);
+        puts(background[i]);
+    }
+}
+
+// 메인 화면 출력 함수
+void mainDraw() {
+    system("cls");
+
+    // 항상 배경 먼저 그리기
+    drawBackground();
+
+    // 손잡기 상태일 때 추가로 손과 하트 그리기
+    if (a == 1) {
+        drawHand(20, 10, 1.0f);
+        drawHeart(40, 7, 1.0f, 0.0f);
+    }
+}
+
+#define GIRLFRIEND_HEIGHT 10
+#define GIRLFRIEND_WIDTH 15
+
+// 여자친구 뒷모습 배열
+const char girlfriend_back_art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH] = {
+    "       ,~.   ",
+    "      . ! ;   ",
+    "    .*,..*.=  ",
+    "  ,-      ~..~",
+    " ;          !~",
+    "         .,   ",
+    " l        .~  ",
+    " .       .-   ",
+    "   *,.,=.     ",
+    " ~~~:~~~~$~~~ "
+};
+
+// 여자친구 옆모습 배열
+const char girlfriend_side_art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH] = {
+    "       ,~.   ",
+    "      . ! ;   ",
+    "    .*,..*.=  ",
+    "  ,-      ~..~",
+    " ;   /      !~",
+    " =   =    .,  ",
+    " l        .~  ",
+    " .       .-   ",
+    "   *,.,=.     ",
+    " ~~~:~~~~$~~~ "
+};
+
+void display_array(const char art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH], int x, int y) {
+    for (int i = 0; i < GIRLFRIEND_HEIGHT; i++) {
+        gotoxy(x, y + i);
+        for (int j = 0; j < GIRLFRIEND_WIDTH; j++) {
+            printf("%c", art[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void girlfriend_back() {
+    display_array(girlfriend_back_art, 27, 1);
+}
+
+void girlfriend_see() {
+    display_array(girlfriend_side_art, 27, 1);
+}
+
+void random() {
+    // srand(time(NULL)) 제거
+    random_function = rand() % 100;
+
+    if (random_function < 30) {  // 30% 확률로 뒤돌아봄
         girlfriend_see();
+        if (a == 1) {  // 손을 잡고 있는 상태라면
+            badEnd();
+            return;
+        }
+        Sleep(1500);  // 1.5초 대기
+        girlfriend_back();  // 다시 뒤돌아섬
     }
     else {
         girlfriend_back();
     }
-
-    //randomtime();
-
 }
 
-void badEnd() {  //게임 종료 조건
-    if (a == 1 && random_function == 1) { //여친이 보고 있을 때 손을 잡았는가?
-        printf("cls");
-        printf("들켰다!\n");
-    }
-}
-
-void randomtime()// 랜덤한 시간 간격 생성 (1초에서 3초 사이)
-{
-    int sleep_time = rand() % 5 + 1; // 1초에서 5초 사이의 랜덤 값
-#ifdef _WIN32
-    Sleep(sleep_time * 1000); // Windows의 경우
-#else
-    sleep(sleep_time); // POSIX 시스템의 경우
-#endif
-}
-
-//메인화면 출력하기
-void mainDraw() {
-    if (a == 1) {
-        // 손잡기 상태일 때 출력할 내용
-
-
-
-        //손의 좌표와 출력
-        int main_hand_x = 20;
-        int main_hand_y = 10;
-        gotoxy(main_hand_x, main_hand_y);
-        printf(" ! ~~~~~~~~~~~~~~~~~~~~~~                ,,,,, ,!!,\n");
-        gotoxy(main_hand_x, main_hand_y + 1);
-        printf(" ,:~                                     ~     ~,. \n");
-        gotoxy(main_hand_x, main_hand_y + 2);
-        printf("  -$..                                   ,@.$-     \n");
-        gotoxy(main_hand_x, main_hand_y + 3);
-        printf("    .-,!!                              .=;-,       \n");
-        gotoxy(main_hand_x, main_hand_y + 4);
-        printf("        -*~.--.                ,,,**.~~            \n");
-        gotoxy(main_hand_x, main_hand_y + 5);
-        printf("            ...~==...,,!===;......---~,            \n");
-
-
-        // 하트의 좌표와 출력
-        int main_heart_x = 40;
-        int main_heart_y = 7;
-        gotoxy(main_heart_x, main_heart_y);
-        printf("    &&     &&    \n");
-        gotoxy(main_heart_x, main_heart_y + 1);
-        printf("  &!!!!& &!!!!&  \n");
-        gotoxy(main_heart_x, main_heart_y + 2);
-        printf("&!!!!!!!&!!!!!!!&\n");
-        gotoxy(main_heart_x, main_heart_y + 3);
-        printf("  &!!!!!!!!!!!&  \n");
-        gotoxy(main_heart_x, main_heart_y + 4);
-        printf("    &!!!!!!!&    \n");
-        gotoxy(main_heart_x, main_heart_y + 5);
-        printf("       &!&       \n");
-        gotoxy(main_heart_x, main_heart_y + 6);
-        printf("        &        \n");
-
-    }
-    else {
-        // 손 안잡기 상태일 때 출력할 내용
-        system("cls");
-
-
-        printf("                                                                                                \n");
-        printf("                                   ,~.                           .:,     ,:~.                  \n");
-        printf("                                   ! ;                         .   :!.*.;~   -.                \n");
-        printf("             .***.            .*****=                          .     .- .      .                  \n");//머리 리본 수정 필요
-        printf("          *         *        *       *~                       .    .  -   .   .                 \n");
-        printf("         .           .      .         .~                                                        \n");
-        printf("         *           *      *         *                       *               *                 \n");
-        printf("           *       *         *       *~                         *            *                  \n");
-        printf("              ***               ***                                 *    *                      \n");
-        printf("             ..:..             ..:..                                 ..:..                      \n");
-        printf("    -~~~~~~~$~~:~~$~~~~~~~~~~~$~~:~~$~~~~~~~~-              -~~~~~~$~~~:~~~$~~~~~~~~~~~~~~~~~~~~\n");
-        printf("    *                                        *              *                                   \n");
-        printf("    *                                        *              *                                   \n");
-        printf("    *                                        *              *                                   \n");
-        printf("    *                                        *              *                                   \n");
-        printf("    *                                        *              *                                   \n");
-        printf("    *                                        *              *                                   \n");
-        printf("    ::::::::::::::::::::::::::::::::::::::::::              ::::::::::::::::::::::::::::::::::: \n");
-        printf("     *      !!!!!!!!         !!!!!!!!       *                *     !!!!!!!!                     \n");
-        printf("    ******************************************              *********************************** \n");
-        printf("    ==========================================              ==================================  \n");
-        printf("     ::::                                ::::                ::::                               \n");
-
-    }
-}
-
-//여자친구 뒷모습 출력 함수
-void girlfriend_back() {
-
-    gotoxy(27, 1);
-    printf("       ,~.   \n");
-    gotoxy(27, 2);
-    printf("      . ! ;   \n");
-    gotoxy(27, 3);
-    printf("    .*,..*.=   \n");
-    gotoxy(27, 4);
-    printf("  ,-        ~..~\n");
-    gotoxy(27, 5);
-    printf(" ;   /          !~\n");
-    gotoxy(27, 6);
-    printf(" =   =       ., \n");
-    gotoxy(27, 7);
-    printf(" l           .~ \n");
-    gotoxy(27, 8);
-    printf(" .          .- \n");
-    gotoxy(27, 9);
-    printf("   *,.,=.   \n");
-    gotoxy(27, 10);
-    printf(" ~~~:~~~~$~~~\n");
-}
-
-void girlfriend_see() {
-
-    gotoxy(27, 1);
-    printf("       ,~.   \n");
-    gotoxy(27, 2);
-    printf("      . ! ;   \n");
-    gotoxy(27, 3);
-    printf("    .*,..*.=   \n");
-    gotoxy(27, 4);
-    printf("  ,-        ~..~\n");
-    gotoxy(27, 5);
-    printf(" ;              !~\n");
-    gotoxy(27, 6);
-    printf("             ., \n");
-    gotoxy(27, 7);
-    printf(" l           .~ \n");
-    gotoxy(27, 8);
-    printf(" .          .- \n");
-    gotoxy(27, 9);
-    printf("   *,.,=.   \n");
-    gotoxy(27, 10);
-    printf(" ~~~:~~~~$~~~\n");
-
+void badEnd() {
+    system("cls");
+    printf("들켰다!\n");
+    exit(0);
 }
 
 int currentGauge = 0; // 초기 게이지 값
@@ -371,12 +397,12 @@ void start() { //시작화면
 }
 
 void mainScreen() { //메인게임
+    srand(time(NULL));  // 게임 시작 시 한 번만 난수 초기화
     while (1)
     {
         mainDraw();
         loveGauge();
         random();
-        badEnd();
     }
     return 0;
 }

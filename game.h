@@ -24,6 +24,7 @@ void girlfriend_back();
 void girlfriend_see();
 void random();
 void randomtime();
+void badEnd();
 
 //게임 실행
 void start();
