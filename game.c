@@ -44,7 +44,6 @@ int keyControl() {
     }
 }
 
-
 void titleDraw() {
     printf("\n\n\n\n");
     printf("           @@      @     !@*     @      @@         ,.   ,,  *@!  !#*;*#@$  @@   \n");
