@@ -1,6 +1,9 @@
 #include "game.h"
 #include "header.h"
 
+#define SCREEN_WIDTH 80
+#define SCREEN_HEIGHT 80
+
 //전역변수로 손잡기 상태 추가
 int a = 1; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해 초기값 1로 설정.
 int random_function = 0; //난수의 나머지
@@ -115,118 +118,93 @@ void infoDraw() {
     }
 }
 
-/* 은진이가 원래 만들었던 함수
-int see = 0;
-void random() {
-    srand(time(NULL)); // 난수 초기화
-    //maindraw();
-    while (1) { // 무한 루프
 
-        int random_function = rand() % 2; // 0 또는 1 랜덤 선택
-        if (random_function == 0) {
-            girlfriend_back();
-
-
-        }
-        else {
-            girlfriend_see();
-        }
-        keyControl(); // 사용자 입력을 받기 위해 호출
-        randomtime();
-        mainDraw();
-
-        // a와 see의 값이 같다면 종료
-        randomtime();
-        if (a == see) {
-            break; // 조건이 만족되면 루프 종료
-        }
-
-    }
-
-    printf("들켰다!\n");
-
-}*/
-
-
-// 하트 그리기 함수
-void drawHeart(int base_x, int base_y, float scale, float rotation) {
-    Matrix3x3 transform = identity_matrix();
-    transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
-    transform = multiply_matrices(transform, scale_matrix(scale, scale));
-    transform = multiply_matrices(transform, rotation_matrix(rotation));
-
-    const char* heart[] = {
-        "    &&     &&    ",
-        "  &!!!!& &!!!!&  ",
-        "&!!!!!!!&!!!!!!!&",
-        "  &!!!!!!!!!!!&  ",
-        "    &!!!!!!!&    ",
-        "       &!&       ",
-        "        &        "
-    };
-
-    for (int i = 0; i < 7; i++) {
-        Vector3 pos = { 0, i, 1 };
-        Vector3 transformed = multiply_matrix_vector(transform, pos);
-        gotoxy((int)transformed.x, (int)transformed.y);
-        puts(heart[i]);
-    }
-}
-
-// 손 그리기 함수
-void drawHand(float base_x, float base_y, float scale) {
+void drawBBO(float base_x, float base_y, float scale) {
     Matrix3x3 transform = identity_matrix();
     transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
     transform = multiply_matrices(transform, scale_matrix(scale, scale));
 
-    const char* hand[] = {
-        " ! ~~~~~~~~~~~~~~~~~~~~~~                ,,,,, ,!!,",
-        " ,:~                                     ~     ~,. ",
-        "  -$..                                   ,@.$-     ",
-        "    .-,!!                              .=;-,       ",
-        "        -*~.--.                ,,,**.~~            ",
-        "            ...~==...,,!===;......---~,            "
+    const char* screen2[] = {
+        "            .;;;;                                                                              ",
+        "          ,=@@@@@@;.               .,,,,                                                       ",
+        "         .@@@@@@@@@@               @@@@@@@                                                     ",
+        "        ,@@@@@@@@@@@@            :@@@@@@@@@=                                                   ",
+        "       -@@@@@@@@@@@@@@.         ~@@@@@@@@@@@!                                                  ",
+        "       *@@@@@@@@@@@@@@~        -@@@@@@@@@@@@@!                                                 ",
+        "       @@@@@@@@!.....=@        @@@@@@@@@@@@@@@                                                 ",
+        "       @@@@@@@@       !       ~~~@@@@@@@@@@@@@!                                                ",
+        "      !@@@@*           !      !       @@@@@@@@$                                                ",
+        "      !@@@@;     ..  ,* !    !      . @@@@@@@@$                                                ",
+        "       @@@@;      '''   !    ! *...~  ,,,@@@@@@                                                ",
+        "       @@@@$            !    !           ;@@@@@                                                ",
+        "       *@@@@@~.         !    !           ;@@@@@                                                ",
+        "       ~@@@@@@           )  (          ,,;@@@@@                                                ",
+        "        :@@@@@           )  (           !@@@@@@                                                ",
+        "         ;@@@@          !    !          @@@@@@@@                                               ",
+        "          !#@      -! ,,  ,,  !!-      ~@@@@@@@@                                               ",
+        "            .*@@:@    *@@, ,@@*    :   -@@@@@@@@                                               ",
+        "            *    @=  *@@@@@@@@@*    : =$@@@@@@@@@                                              ",
+        "          ~;;;:;.;,;   =@@@@@*         -@@@@@@@@@                                              ",
+        "         ,@.      .;,   .@@@.       =  -@@@@@@@@@                                              ",
+        "        *  ;$    #~  #~  .@.      !*   -@@@@@@@@@~                                             ",
+        "      !~     ~~~~     ,~**     *~..~**=@@@@@@@@@*                                              ",
+        "      $                   !;           @@@@@@@@@@                                              ",
+        "      $                    -.          @@@@@@@@@@!                                             ",
+        "      --                    #          .@@@@@@@@@!                                             ",
+        "       :                    :.         @@@@@@@@@@                                              "
     };
 
-    for (int i = 0; i < 6; i++) {
-        Vector3 pos = { 0, i, 1 };
+    // y 좌표를 40부터 시작하도록 조정
+    for (int i = 0; i < 24; i++) {
+        Vector3 pos = { 0, i + 40, 1 }; // y 좌표가 40부터 시작
         Vector3 transformed = multiply_matrix_vector(transform, pos);
         gotoxy((int)transformed.x, (int)transformed.y);
-        puts(hand[i]);
+        puts(screen2[i]);
     }
 }
+void drawNotBBO(float base_x, float base_y, float scale) {
+    Matrix3x3 transform = identity_matrix();
+    transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
+    transform = multiply_matrices(transform, scale_matrix(scale, scale));
 
-// 배경 그리기 함수
-void drawBackground() {
-    const char* background[] = {
-        "                                                                                               ",
-        "                                                                 .:,     ,:~.                  ",
-        "                                                               .   :!.*.;~   -.                ",
-        "             .***.                                             .     .- .      .               ",
-        "          *         *                                         .    .  -   .   .                ",
-        "         .           .                                                                         ",
-        "         *           *                                        *               *                ",
-        "           *       *                                            *            *                 ",
-        "              ***                                                   *    *                     ",
-        "             ..:..                                                   ..:..                     ",
-        "    -~~~~~~~$~~:~~$~~~~~~~~~~~~~~~~~~~~~~~~~~-              -~~~~~~$~~~:~~~$~~~~~~~~~~~~~~~~~~~~",
-        "    *                                        *              *                                   ",
-        "    *                                        *              *                                   ",
-        "    *                                        *              *                                   ",
-        "    *                                        *              *                                   ",
-        "    *                                        *              *                                   ",
-        "    *                                        *              *                                   ",
-        "    ::::::::::::::::::::::::::::::::::::::::::              ::::::::::::::::::::::::::::::::::: ",
-        "     *      !!!!!!!!         !!!!!!!!       *                *     !!!!!!!!                     ",
-        "    ******************************************              *********************************** ",
-        "    ==========================================              ====================================",
-        "     ::::                                ::::                ::::                               "
-    };
+    
+    const char* screen1[] = {
+            "        ;;;;.                                                                                 ",
+            "     ,#@@@@@@@,                      ,,,,                                                     ",
+            "    ~@@@@@@@@@@;                   -@@@@@@=                                                   ",
+            "   :@@@@@@@@@@@@!                 #@@@@@@@@@~                                                 ",
+            "   @@@@@@@@@@@@@#                #@@@@@@@@@@@-                                                ",
+            "  #@@@@@@@@@@@@@@@              @@@@@@@@@@@@@@.                                               ",
+            "  #@@@@@@@@@@@@@@@             -@@@@@@@@@@@@@@!                                               ",
+            " .@@@@@@@@@@@@@@@@-            =@@@@@@@@@@@@@@@                                               ",
+            " .@@@@@@@@@@@@@@@@~            @@@@@@@@@@@@@@@@.                                              ",
+            " .@@@@@@@@@@@@@@@@~            @@@@@@@@@@@@@@@@#                                              ",
+            " .@@@@@@@@@@@@@@@@~            @@@@@@@@@@@@@@@@#                                              ",
+            "  #@@@@@@@@@@@@@@@             @@@@@@@@@@@@@@@@#                                              ",
+            "  $@@@@@@@@@@@@@@=             @@@@@@@@@@@@@@@@$                                              ",
+            "   @@@@@@@@@@@@@@              @@@@@@@@@@@@@@@@#                                              ",
+            "   !@@@@@@@@@@@@-             ,@@@@@@@@@@@@@@@@#                                              ",
+            "    *@@@@@@@@@@;               @@@@@@@@@@@@@@@@#                                              ",
+            "      =@@@@@@=,                @@@@@@@@@@@@@@@@#                                              ",
+            "       :~@@;,                  @@@@@@@@@@@@@@@@#                                              ",
+            "       ~    -                  @@@@@@@@@@@@@@@@,                                              ",
+            "      ;;;: -!;;                @@@@@@@@@@@@@@@@                                               ",
+            "    .#    ,   ,*               @@@@@@@@@@@@@@@@                                               ",
+            "   ~!-$       -;=              @@@@@@@@@@@@@@@@                                               ",
+            " *~.   ~-***.~   ~*           ~@@@@@@@@@@@@@@@@                                               ",
+            ";                  !:      .:!-@@@@@@@@@@@@@@@@!:                                             ",
+            "                     =:   .!   @@@@@@@@@@@@@@@@  $                                            ",
+            "                      *   !    @@@@@@@@@@@@@@@*                                               ",
+            "                      *   !    @@@@@@@@@@@@@@@!                                               "
 
-    // 배경 출력
-    for (int i = 0; i < 22; i++) {
-        gotoxy(0, i);
-        puts(background[i]);
+        };
+
+    // y 좌표를 40부터 시작하도록 조정
+    for (int i = 0; i < 24; i++) {
+        Vector3 pos = { 0, i + 40, 1 }; // y 좌표가 40부터 시작
+        Vector3 transformed = multiply_matrix_vector(transform, pos);
+        gotoxy((int)transformed.x, (int)transformed.y);
+        puts(screen1[i]);
     }
 }
 
@@ -234,15 +212,15 @@ void drawBackground() {
 void mainDraw() {
     system("cls");
 
-    // 항상 배경 먼저 그리기
-    drawBackground();
-
-    // 손잡기 상태일 때 추가로 손과 하트 그리기
-    if (a == 1) {
-        drawHand(20, 10, 1.0f);
-        drawHeart(40, 7, 1.0f, 0.0f);
+    // a의 값에 따라 적절한 함수 호출
+    if (a == 0) {
+        drawNotBBO(0.0f, 0.0f, 1.0f); // a가 0일 때 호출
+    }
+    else if (a == 1) {
+        drawBBO(0.0f, 0.0f, 1.0f);// a가 1일 때 호출
     }
 }
+
 
 #define GIRLFRIEND_HEIGHT 10
 #define GIRLFRIEND_WIDTH 15
