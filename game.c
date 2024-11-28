@@ -164,7 +164,7 @@ void drawNotBBO(float base_x, float base_y, float scale) {
     transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
     transform = multiply_matrices(transform, scale_matrix(scale, scale));
 
-    
+
     const char* screen1[] = {
             "        ;;;;.                                                                                 ",
             "     ,#@@@@@@@,                      ,,,,                                                     ",
@@ -194,7 +194,7 @@ void drawNotBBO(float base_x, float base_y, float scale) {
             "                      *   !    @@@@@@@@@@@@@@@*                                               ",
             "                      *   !    @@@@@@@@@@@@@@@!                                               "
 
-        };
+    };
 
     // y 좌표를 40부터 시작하도록 조정
     for (int i = 0; i < 24; i++) {
