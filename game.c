@@ -116,8 +116,6 @@ void infoDraw() {
         }
     }
 }
-
-
 void drawBBO(float base_x, float base_y, float scale) {
     Matrix3x3 transform = identity_matrix();
     transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
@@ -219,7 +217,6 @@ void mainDraw() {
         drawBBO(0.0f, 0.0f, 1.0f);// a가 1일 때 호출
     }
 }
-
 
 #define GIRLFRIEND_HEIGHT 10
 #define GIRLFRIEND_WIDTH 15
