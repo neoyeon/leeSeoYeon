@@ -274,7 +274,7 @@ void random() {
         // srand(time(NULL)) Á¦°Å
         random_function = rand() % 100;
 
-        if (random_function < 5) {  // 30% È®·ü·Î µÚµ¹¾Æº½
+        if (random_function < 2) {  // 5% È®·ü·Î µÚµ¹¾Æº½
             gfSee = 1;
             girlfriend_see();
 
