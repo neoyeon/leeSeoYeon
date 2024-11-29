@@ -1,8 +1,8 @@
 #include "game.h"
 #include "header.h"
 
-#define SCREEN_WIDTH 80
-#define SCREEN_HEIGHT 50
+#define SCREEN_WIDTH 100
+#define SCREEN_HEIGHT 40
 
 //전역변수로 손잡기 상태 추가
 int a = 1; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해 초기값 1로 설정.
