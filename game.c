@@ -2,11 +2,13 @@
 #include "header.h"
 
 #define SCREEN_WIDTH 80
-#define SCREEN_HEIGHT 48
+#define SCREEN_HEIGHT 50
 
 //전역변수로 손잡기 상태 추가
 int a = 1; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해 초기값 1로 설정.
-int random_function = 0; //난수의 나머지
+int random_function = 0; // 난수의 나머지
+int gfSee = 0; // 여자친구 돌아봤는지 여부. 0 일 때 안 봄, 1 일 때 봄.
+int gfTime = 0; // 여자친구가 돌아보고 있는 시간
 
 // 그래픽 요소를 표현하기 위한 구조체
 typedef struct {
@@ -138,11 +140,11 @@ void drawBBO(float base_x, float base_y, float scale) {
         "       ~@@@@@@           )  (          ,,;@@@@@                                                ",
         "        :@@@@@           )  (           !@@@@@@                                                ",
         "         ;@@@@          !    !          @@@@@@@@                                               ",
-        "          !#@      -! ,,  ,,  !!-      ~@@@@@@@@                                               ",
-        "            .*@@:@    *@@, ,@@*    :   -@@@@@@@@                                               ",
+        "          !#@      -!         !!-      ~@@@@@@@@                                               ",
+        "            .*@@:@    *@@; ;@@*    :   -@@@@@@@@                                               ",
         "            *    @=  *@@@@@@@@@*    : =$@@@@@@@@@                                              ",
-        "          ~;;;:;.;,;   =@@@@@*         -@@@@@@@@@                                              ",
-        "         ,@.      .;,   .@@@.       =  -@@@@@@@@@                                              ",
+        "          ~;;;:;.;,;   *@@@@@*         -@@@@@@@@@                                              ",
+        "         ,@.      .;,   *@@@*       =  -@@@@@@@@@                                              ",
         "        *  ;$    #~  #~  .@.      !*   -@@@@@@@@@~                                             ",
         "      !~     ~~~~     ,~**     *~..~**=@@@@@@@@@*                                              ",
         "      $                   !;           @@@@@@@@@@                                              ",
@@ -211,10 +213,10 @@ void mainDraw() {
 
     // a의 값에 따라 적절한 함수 호출
     if (a == 0) {
-        drawNotBBO(0.0f, 0.0f, 1.0f); // a가 0일 때 호출
+        drawNotBBO(0.0f, 10.0f, 1.0f); // a가 0일 때 호출
     }
     else if (a == 1) {
-        drawBBO(0.0f, 0.0f, 1.0f);// a가 1일 때 호출
+        drawBBO(0.0f, 10.0f, 1.0f);// a가 1일 때 호출
     }
 }
 
@@ -268,22 +270,34 @@ void girlfriend_see() {
 }
 
 void random() {
-    // srand(time(NULL)) 제거
-    random_function = rand() % 100;
+    if (gfSee = 0) {
+        // srand(time(NULL)) 제거
+        random_function = rand() % 100;
 
-    if (random_function < 30) {  // 30% 확률로 뒤돌아봄
-        girlfriend_see();
-        if (a == 1) {  // 손을 잡고 있는 상태라면
-            badEnd();
-            return;
+        if (random_function < 5) {  // 30% 확률로 뒤돌아봄
+            gfSee = 1;
+            girlfriend_see();
+
+            if (a == 1) {  // 손을 잡고 있는 상태라면
+                badEnd();
+                return;
+            }
         }
-        Sleep(1500);  // 1.5초 대기
-        girlfriend_back();  // 다시 뒤돌아섬
-    }
-    else {
-        girlfriend_back();
     }
 }
+
+void girlFriendTime() {
+    if (gfSee = 1) {
+        gfTime += 1;
+        girlfriend_see();
+
+        if (gfTime = 5) {
+            girlfriend_back();
+            gfSee = 0;
+        }
+    }
+}
+
 
 void badEnd() {
     system("cls");
@@ -377,6 +391,12 @@ void mainScreen() { //메인게임
         mainDraw();
         loveGauge();
         random();
+        girlFriendTime();
+        
+        Sleep(100);
+
+        a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록
+        drawNotBBO(0.0f, 0.0f, 1.0f);
     }
     return 0;
 }

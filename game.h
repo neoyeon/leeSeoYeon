@@ -22,8 +22,8 @@ int menuDraw();
 void infoDraw();
 void girlfriend_back();
 void girlfriend_see();
+void girlFriendTime(); // 여자친구가 돌아보고 있는 시간
 void random();
-void randomtime();
 void badEnd();
 
 //게임 실행
