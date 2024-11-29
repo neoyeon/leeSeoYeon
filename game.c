@@ -271,10 +271,10 @@ void girlfriend_see() {
 
 void random() {
     if (gfSee = 0) {
-        // srand(time(NULL)) 제거
+        srand(time(NULL)); // 함수 실행할 때마다 새로운 난수를 뽑음
         random_function = rand() % 100;
 
-        if (random_function < 2) {  // 5% 확률로 뒤돌아봄
+        if (random_function < 20) {  // 숫자 확률로 뒤돌아봄
             gfSee = 1;
             girlfriend_see();
 
