@@ -467,7 +467,6 @@ void mainScreen() { //메인게임
 
     }
     system("cls");
-    displayScore();
     {if (score >= 20) {
         End1();
     }
