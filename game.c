@@ -471,7 +471,7 @@ void mainScreen() { //메인게임
     {
         elapsedTime = updateTimeAndGauge(startTime, &currentGauge);
         mainDraw();
-        loveGauge();
+        //loveGauge();
         random();
         girlFriendTime();
         handleKissEvent();
