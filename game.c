@@ -364,6 +364,34 @@ void loveGauge() {
 
 
 
+int score = 0;  
+void End1() {
+    printf("오빠 집중 제대로 안하네? 저여자봤지 \n");
+    }
+
+void End2() {
+    printf("역시~ 자기는 나밖에 없지? \n");
+}
+
+
+
+// 뽀뽀 이벤트 처리 함수
+void handleKissEvent() {
+    // 스페이스바가 눌렸는지 확인
+    if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+        score++; // 점수 1점 증가
+        gotoxy(70, 1);
+       // printf("현재 점수: %d\n", score); // 점수 출력
+        Sleep(300); // 중복 입력 방지 대기 시간
+    }
+}
+
+
+void displayScore() {
+    gotoxy(2, 2); // 화면 좌측 상단에 점수 표시
+    printf("점수: %d", score);
+}
+
 // 게임 실행 함수들 //
 void start() { //시작화면
     while (1) {
@@ -386,17 +414,68 @@ void start() { //시작화면
 
 void mainScreen() { //메인게임
     srand(time(NULL));  // 게임 시작 시 한 번만 난수 초기화
+
+
+    //은진추가
+    // 시간 측정을 위한 변수 선언
+    int currentGauge = 0; // 초기 게이지 값
+    time_t startTime, currentTime;
+
+    // 게임 시작 시간 기록
+    startTime = time(NULL);
+
     while (1)
     {
+        // 현재 시간 계산
+        currentTime = time(NULL);
+        currentGauge = difftime(currentTime, startTime) * GAUGE_SPEED;
+        if (currentGauge > MAX_GAUGE) {
+            currentGauge = MAX_GAUGE;
+        }
+
         mainDraw();
-        loveGauge();
+        //loveGauge();
         random();
         girlFriendTime();
-        
+        handleKissEvent();
+        gotoxy(70, 3);
+        printf("현재 시간: %d초\n", (int)difftime(currentTime, startTime));
+        gotoxy(70, 4);
+        printf("점수: %d\n", score); // 점수를 표시하는 부분 (score 변수를 업데이트하는 로직 추가 필요)
+
+
         Sleep(100);
 
         a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록
         drawNotBBO(0.0f, 0.0f, 1.0f);
+
+       
+
+        /* 게이지 그리기
+        drawGauge(10, 5, currentGauge);*/
+
+        // 게임 제한 시간 초과 확인
+        if (difftime(currentTime, startTime) >= GAME_TIME_LIMIT) {
+            system("cls");
+            printf("\n\n");
+            printf("       [ 게임 종료 ]\n\n");
+            printf("       제한 시간 60초가 초과되었습니다!\n\n");
+            printf("       결과를 확인하세요.\n");
+            //(500);
+            break; // 루프 종료
+        }
+
     }
+    system("cls");
+    displayScore();
+    {if (score >= 20) {
+        End1();
+    }
+    else if (score >= 10) {
+        End2();
+    }}
     return 0;
-}
+
+    }
+
+
