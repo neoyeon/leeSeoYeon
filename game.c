@@ -365,15 +365,6 @@ void loveGauge() {
 
 
 int score = 0;  
-void End1() {
-    printf("오빠 집중 제대로 안하네? 저여자봤지 \n");
-    }
-
-void End2() {
-    printf("역시~ 자기는 나밖에 없지? \n");
-}
-
-
 
 // 뽀뽀 이벤트 처리 함수
 void handleKissEvent() {
@@ -384,12 +375,39 @@ void handleKissEvent() {
        // printf("현재 점수: %d\n", score); // 점수 출력
         Sleep(300); // 중복 입력 방지 대기 시간
     }
+    // 키 입력 확인
+    if (kbhit()) {
+        keyControl();
+    }
 }
 
+// 엔딩1
+void End1() {
+    printf("흠 먼가 아쉬운데엥~\n");
+}
 
-void displayScore() {
-    gotoxy(2, 2); // 화면 좌측 상단에 점수 표시
-    printf("점수: %d", score);
+// 엔딩2
+void End2() {
+    printf("역시~ 자기는 나밖에 없지?\n");
+}
+
+// 기본 엔딩 (Optional)
+void DefaultEnding() {
+    printf("오빠 집중 제대로 안하네? 저 여자 봤지\n");
+}
+
+void End() {
+    system("cls"); // 콘솔 화면 지우기
+
+    if (score <= 10) {
+        DefaultEnding(); // 점수가 10 이하
+    }
+    else if (score <= 15) {
+        End2(); // 점수가 11 이상 15 이하
+    }
+    else {
+        End1(); // 점수가 16 이상
+    }
 }
 
 // 게임 실행 함수들 //
@@ -411,37 +429,53 @@ void start() { //시작화면
     }
     return 0;
 }
+//시간 점수 표시
+void Info(int elapsedTime, int score) {
+    gotoxy(70, 3); // 시간 표시
+    printf("현재 시간: %d초\n", elapsedTime);
+
+    gotoxy(70, 4); // 점수 표시
+    printf("점수: %d\n", score);
+}
+
+//게임 종료 조건
+bool checkGameTimeLimit(time_t startTime) {
+    time_t currentTime = time(NULL);
+    return difftime(currentTime, startTime) >= GAME_TIME_LIMIT;
+}
+
+int updateTimeAndGauge(time_t startTime, int* currentGauge) {
+    time_t currentTime = time(NULL); // 현재 시간 가져오기
+    *currentGauge = difftime(currentTime, startTime) * GAUGE_SPEED;
+
+    if (*currentGauge > MAX_GAUGE) {
+        *currentGauge = MAX_GAUGE; // 게이지가 최대값을 넘지 않도록 제한
+    }
+
+    return (int)difftime(currentTime, startTime); // 경과 시간 반환
+}
+
 
 void mainScreen() { //메인게임
     srand(time(NULL));  // 게임 시작 시 한 번만 난수 초기화
-
-
-    //은진추가
-    // 시간 측정을 위한 변수 선언
+    
+ // 시간 측정을 위한 변수 선언
     int currentGauge = 0; // 초기 게이지 값
     time_t startTime, currentTime;
-
-    // 게임 시작 시간 기록
+     
+    //게임 시작 시간 기록
     startTime = time(NULL);
-
+    int elapsedTime = 0; // 경과 시간
+    
     while (1)
     {
-        // 현재 시간 계산
-        currentTime = time(NULL);
-        currentGauge = difftime(currentTime, startTime) * GAUGE_SPEED;
-        if (currentGauge > MAX_GAUGE) {
-            currentGauge = MAX_GAUGE;
-        }
-
+        elapsedTime = updateTimeAndGauge(startTime, &currentGauge);
         mainDraw();
-        //loveGauge();
+        loveGauge();
         random();
         girlFriendTime();
         handleKissEvent();
-        gotoxy(70, 3);
-        printf("현재 시간: %d초\n", (int)difftime(currentTime, startTime));
-        gotoxy(70, 4);
-        printf("점수: %d\n", score); // 점수를 표시하는 부분 (score 변수를 업데이트하는 로직 추가 필요)
+        Info(elapsedTime, score);
 
 
         Sleep(100);
@@ -449,32 +483,16 @@ void mainScreen() { //메인게임
         a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록
         drawNotBBO(0.0f, 0.0f, 1.0f);
 
-       
+           // 게임 종료 조건
+        if (elapsedTime >= GAME_TIME_LIMIT) {
+            break;
 
-        /* 게이지 그리기
-        drawGauge(10, 5, currentGauge);*/
-
-        // 게임 제한 시간 초과 확인
-        if (difftime(currentTime, startTime) >= GAME_TIME_LIMIT) {
-            system("cls");
-            printf("\n\n");
-            printf("       [ 게임 종료 ]\n\n");
-            printf("       제한 시간 60초가 초과되었습니다!\n\n");
-            printf("       결과를 확인하세요.\n");
-            //(500);
-            break; // 루프 종료
         }
-
     }
-    system("cls");
-    {if (score >= 20) {
-        End1();
-    }
-    else if (score >= 10) {
-        End2();
-    }}
+       
+        
+    End();
     return 0;
 
     }
-
 
