@@ -20,8 +20,8 @@ void loveGauge();
 void titleDraw();
 int menuDraw();
 void infoDraw();
-void girlfriend_back();
-void girlfriend_see();
+void girlfriend_back(); // 안보는 중
+void girlfriend_see();  //  보는 중
 void girlFriendTime(); // 여자친구가 돌아보고 있는 시간
 void random();
 void badEnd();

@@ -42,7 +42,7 @@ int keyControl() {
     else if (temp == ' ') { //스페이스바(공백)
         a = (a == 0) ? 1 : 0; // 명확한 상태 전환
         //system("cls"); // 화면 깔끔하게 지우기
-        mainDraw(); // 상태가 변경될 때마다 화면 갱신 //
+        //mainDraw(); // 상태가 변경될 때마다 화면 갱신 //
         return SUBMIT;
     }
 }
@@ -249,10 +249,10 @@ void girlfriend_see() {
     printf(" ,~ ;=@@@@*    ;  # *  # \n");
 
     gotoxy(x, y + 11);
-    printf(" .~   ===.     ~ .   =::!-,\n");
+    printf(" .~   ===.     ~ .   =::\n");
 
     gotoxy(x, y + 12);
-    printf("  *         .==  :.   ,---.\n");
+    printf("  *         .==  :.   ,\n");
 
     gotoxy(x, y + 13);
     printf("   #  .     ,~   :\n");
@@ -405,38 +405,34 @@ void girlfriend_see() {
 */
 
 void random() {
-    if (gfSee = 0) { // 여친이 보고 있지 않을 때
+    if (gfSee == 0) { // 여친이 보고 있지 않을 때
+        girlfriend_back();
+
         srand(time(NULL)); // 함수 실행할 때마다 새로운 난수를 뽑음
         random_function = rand() % 100;
 
-        if (random_function < 10) {  // 숫자 확률로 뒤돌아봄
+        if (random_function < 50) {  // 숫자 확률로 뒤돌아봄
             gfSee = 1;
-            girlfriend_see();
-
-            if (a == 1) {  // 손을 잡고 있는 상태라면
-                badEnd();
-                return;
-            }
         }
     }
 }
 
 void girlFriendTime() {
-    if (gfSee = 1) {
-        gfTime += 1;
-        girlfriend_see();
+    gfTime += 1; // 여친이 보고 있는 시간 1씩 추가
 
-        if (gfTime = 5) {
-            girlfriend_back();
-            gfSee = 0;
-        }
-    }
-        
+    girlfriend_see();
+
     if (a == 1) {  // 손을 잡고 있는 상태라면
-            badEnd();
-            return;
+        Sleep(5000);
+        badEnd();
+        return;
     }
 
+    if (gfTime = 5) {
+        //girlfriend_back();
+        gfSee = 0;
+        gfTime = 0;
+    }
 }
 
 
@@ -516,10 +512,6 @@ void handleKissEvent() {
         gotoxy(70, 1);
        // printf("현재 점수: %d\n", score); // 점수 출력
         //Sleep(300); // 중복 입력 방지 대기 시간
-    }
-    // 키 입력 확인
-    if (kbhit()) {
-        keyControl();
     }
 }
 
@@ -601,7 +593,12 @@ int updateTimeAndGauge(time_t startTime, int* currentGauge) {
 
 
 void mainScreen() { //메인게임
-    srand(time(NULL));  // 게임 시작 시 한 번만 난수 초기화
+    // 전역변수 초기화
+    a = 0; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해 초기값 1로 설정.
+    random_function = 0; // 난수의 나머지
+    gfSee = 0; // 여자친구 돌아봤는지 여부. 0 일 때 안 봄, 1 일 때 봄.
+    gfTime = 0; // 여자친구가 돌아보고 있는 시간
+    score = 0; // 점수
     
  // 시간 측정을 위한 변수 선언
     int currentGauge = 0; // 초기 게이지 값
@@ -614,10 +611,21 @@ void mainScreen() { //메인게임
     while (1)
     {
         elapsedTime = updateTimeAndGauge(startTime, &currentGauge);
+
+        a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록 매번 초기화
+
+        // 키 입력 확인
+        if (kbhit()) {
+            keyControl();
+        }
+
         mainDraw();
         //loveGauge();
         random(); // gfSee = 0 일 때만 랜덤으로 gfSee = 1 로 만듦
-        girlFriendTime(); // gfSee = 1 일 때만 변수 gfSee 1씩 늘려 5일 때 gfSee = 0 으로 만듦
+
+        if (gfSee == 1) {
+            girlFriendTime(); // gfSee = 1 일 때만 변수 gfSee 1씩 늘려 5일 때 gfSee = 0 으로 만듦
+        }
         
         handleKissEvent();
         Info(elapsedTime, score);
@@ -625,7 +633,6 @@ void mainScreen() { //메인게임
 
         Sleep(700);
 
-        a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록
 
            // 게임 종료 조건
         if (elapsedTime >= GAME_TIME_LIMIT) {
