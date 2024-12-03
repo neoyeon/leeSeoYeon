@@ -9,6 +9,7 @@ int a = 1; // 0: 손 안잡기, 1: 손잡기 //메인게임 시작시 손안잡기로 설정하기 위해
 int random_function = 0; // 난수의 나머지
 int gfSee = 0; // 여자친구 돌아봤는지 여부. 0 일 때 안 봄, 1 일 때 봄.
 int gfTime = 0; // 여자친구가 돌아보고 있는 시간
+int score = 0; // 점수
 
 // 그래픽 요소를 표현하기 위한 구조체
 typedef struct {
@@ -162,49 +163,37 @@ void drawBBO(float base_x, float base_y, float scale) {
     }
 }
 void drawNotBBO(float base_x, float base_y, float scale) {
-    Matrix3x3 transform = identity_matrix();
-    transform = multiply_matrices(transform, translation_matrix(base_x, base_y));
-    transform = multiply_matrices(transform, scale_matrix(scale, scale));
 
-
-    const char* screen1[] = {
-         "        ;;;;.                                                                                 ",
-         "     ,#@@@@@@@,                                        ,,,,                                   ",
-         "    ~@@@@@@@@@@;                                     -@@@@@@=                                 ",
-         "   :@@@@@@@@@@@@!                                   #@@@@@@@@@~                               ",
-         "   @@@@@@@@@@@@@#                                  #@@@@@@@@@@@-                              ",
-         "  #@@@@@@@@@@@@@@@                                @@@@@@@@@@@@@@.                             ",
-         "  #@@@@@@@@@@@@@@@                               -@@@@@@@@@@@@@@!                             ",
-         " .@@@@@@@@@@@@@@@@-                              =@@@@@@@@@@@@@@@                             ",
-         " .@@@@@@@@@@@@@@@@~                              @@@@@@@@@@@@@@@@.                            ",
-         " .@@@@@@@@@@@@@@@@~                              @@@@@@@@@@@@@@@@#                            ",
-         " .@@@@@@@@@@@@@@@@~                              @@@@@@@@@@@@@@@@#                            ",
-         "  #@@@@@@@@@@@@@@@                               @@@@@@@@@@@@@@@@#                            ",
-         "  $@@@@@@@@@@@@@@=                               @@@@@@@@@@@@@@@@$                            ",
-         "   @@@@@@@@@@@@@@                                @@@@@@@@@@@@@@@@#                            ",
-         "   !@@@@@@@@@@@@-                               ,@@@@@@@@@@@@@@@@#                            ",
-         "    *@@@@@@@@@@;                                 @@@@@@@@@@@@@@@@#                            ",
-         "      =@@@@@@=,                                  @@@@@@@@@@@@@@@@#                            ",
-         "       :~@@;,                                    @@@@@@@@@@@@@@@@#                            ",
-         "       ~    -                                    @@@@@@@@@@@@@@@@,                            ",
-         "      ;;;: -!;;                                  @@@@@@@@@@@@@@@@                             ",
-         "    .#    ,   ,*                                 @@@@@@@@@@@@@@@@                             ",
-         "   ~!-$       -;=                                @@@@@@@@@@@@@@@@                             ",
-         " *~.   ~-***.~   ~*                             ~@@@@@@@@@@@@@@@@                             ",
-         ";                  !:                        .:!-@@@@@@@@@@@@@@@@!:                           ",
-         "                     =:                     .!   @@@@@@@@@@@@@@@@  $                          ",
-         "                      *                      !    @@@@@@@@@@@@@@@*                            ",
-         "                      *   !                       @@@@@@@@@@@@@@@!                            "
-
-    };
-
-    // y 좌표를 40부터 시작하도록 조정
-    for (int i = 0; i < 24; i++) {
-        Vector3 pos = { 0, i + 40, 1 }; // y 좌표가 40부터 시작
-        Vector3 transformed = multiply_matrix_vector(transform, pos);
-        gotoxy((int)transformed.x, (int)transformed.y);
-        puts(screen1[i]);
-    }
+    printf(
+        "                 ;;;;.\n"
+        "              ,#@@@@@@@,                                        ,,,,\n"
+        "             ~@@@@@@@@@@;                                     -@@@@@@= \n"
+        "            :@@@@@@@@@@@@!                                   #@@@@@@@@@~\n"
+        "            @@@@@@@@@@@@@#                                  #@@@@@@@@@@@- \n"
+        "           #@@@@@@@@@@@@@@@                                @@@@@@@@@@@@@@.\n"
+        "           #@@@@@@@@@@@@@@@                               -@@@@@@@@@@@@@@!\n"
+        "          .@@@@@@@@@@@@@@@@-                              =@@@@@@@@@@@@@@@\n"
+        "          .@@@@@@@@@@@@@@@@~                              @@@@@@@@@@@@@@@@.\n"
+        "          .@@@@@@@@@@@@@@@@~                              @@@@@@@@@@@@@@@@#\n"
+        "          .@@@@@@@@@@@@@@@@~                              @@@@@@@@@@@@@@@@#\n"
+        "           #@@@@@@@@@@@@@@@                               @@@@@@@@@@@@@@@@#\n"
+        "           $@@@@@@@@@@@@@@=                               @@@@@@@@@@@@@@@@$\n"
+        "            @@@@@@@@@@@@@@                                @@@@@@@@@@@@@@@@#\n"
+        "            !@@@@@@@@@@@@-                               ,@@@@@@@@@@@@@@@@#\n"
+        "             *@@@@@@@@@@;                                 @@@@@@@@@@@@@@@@#\n"
+        "               =@@@@@@=,                                  @@@@@@@@@@@@@@@@#\n"
+        "                :~@@;,                                    @@@@@@@@@@@@@@@@#\n"
+        "                ~    -                                    @@@@@@@@@@@@@@@@,\n"
+        "               ;;;: -!;;                                  @@@@@@@@@@@@@@@@\n"
+        "             .#    ,   ,*                                 @@@@@@@@@@@@@@@@\n"
+        "            ~!-$       -;=                                @@@@@@@@@@@@@@@@\n"
+        "          *~.   ~-***.~   ~*                             ~@@@@@@@@@@@@@@@@\n"
+        "         ;                  !:                        .:!-@@@@@@@@@@@@@@@@!:\n"
+        "                              =:                     .!   @@@@@@@@@@@@@@@@  $\n"
+        "                               *                      !    @@@@@@@@@@@@@@@* \n"
+        "                               *   !                       @@@@@@@@@@@@@@@!\n"
+    );
+    
 }
 
 // 메인 화면 출력 함수
@@ -220,37 +209,179 @@ void mainDraw() {
     }
 }
 
-#define GIRLFRIEND_HEIGHT 10
-#define GIRLFRIEND_WIDTH 15
+// 여자친구 보고 있는 모습
+void girlfriend_see() {
 
-// 여자친구 뒷모습 배열
-const char girlfriend_back_art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH] = {
-    "       ,~.   ",
-    "      . ! ;   ",
-    "    .*,..*.=  ",
-    "  ,-      ~..~",
-    " ;          !~",
-    "         .,   ",
-    " l        .~  ",
-    " .       .-   ",
-    "   *,.,=.     ",
-    " ~~~:~~~~$~~~ "
-};
+    int x = 32;
+    int y = 0;
 
-// 여자친구 옆모습 배열
-const char girlfriend_side_art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH] = {
-    "       ,~.   ",
-    "      . ! ;   ",
-    "    .*,..*.=  ",
-    "  ,-      ~..~",
-    " ;   /      !~",
-    " =   =    .,  ",
-    " l        .~  ",
-    " .       .-   ",
-    "   *,.,=.     ",
-    " ~~~:~~~~$~~~ "
-};
+    gotoxy(x, y);
+    printf("       .,..,.\n");
 
+    gotoxy(x, y + 1);
+    printf("      *~~~-~~;!\n");
+
+    gotoxy(x, y + 2);
+    printf("     #         ;  .  .\n");
+
+    gotoxy(x, y + 3);
+    printf("    ;          ,!,:- ;,\n");
+
+    gotoxy(x, y + 4);
+    printf("   $             #.   *\n");
+
+    gotoxy(x, y + 5);
+    printf("  *              -    *\n");
+
+    gotoxy(x, y + 6);
+    printf("  *@@@@@@@@@$    .    *\n");
+
+    gotoxy(x, y + 7);
+    printf(" ,~   .::    .    #   .\n");
+
+    gotoxy(x, y + 8);
+    printf(" ,~  ##@@#  ,~ :  #!   : \n");
+
+    gotoxy(x, y + 9);
+    printf(" ,~ : @@@@=-   ;  #!.  #\n");
+
+    gotoxy(x, y + 10);
+    printf(" ,~ ;=@@@@*    ;  # *  # \n");
+
+    gotoxy(x, y + 11);
+    printf(" .~   ===.     ~ .   =::!-,\n");
+
+    gotoxy(x, y + 12);
+    printf("  *         .==  :.   ,---.\n");
+
+    gotoxy(x, y + 13);
+    printf("   #  .     ,~   :\n");
+
+    gotoxy(x, y + 14);
+    printf("   ~- ,     ,~  = \n");
+
+    gotoxy(x, y + 15);
+    printf("    ;$.     ,~,* \n");
+
+    gotoxy(x, y + 16);
+    printf("     .;*,   !=~ \n");
+
+    gotoxy(x, y + 17);
+    printf("        **$,\n");
+
+    gotoxy(x, y + 18);
+    printf("        *   .-\n");
+
+    gotoxy(x, y + 19);
+    printf("       *:    !.\n");
+
+    gotoxy(x, y + 20);
+    printf("    -;-!~   .;;;-;\n");
+
+    gotoxy(x, y + 21);
+    printf("  *#     $@@$     $*\n");
+
+    gotoxy(x, y + 22);
+    printf(" $                 ,.\n");
+
+    gotoxy(x, y + 23);
+    printf(" .                 ~,\n");
+
+    gotoxy(x, y + 24);
+    printf(",                  ,.\n");
+
+    gotoxy(x, y + 25);
+    printf("=                   ,\n");
+
+}
+
+
+// 여자친구 뒷모습
+void girlfriend_back() {
+    int x = 32;
+    int y = 0;
+
+    gotoxy(x, y);
+    printf("       .,..,.\n");
+
+    gotoxy(x, y + 1);
+    printf("      *~~~-~~;!\n");
+
+    gotoxy(x, y + 2);
+    printf("     #   =-=   ;        \n");
+
+    gotoxy(x, y + 3);
+    printf("    ;   :  ~;  ,!       \n");
+
+    gotoxy(x, y + 4);
+    printf("   $    *   $    !       \n");
+
+    gotoxy(x, y + 5);
+    printf("  *     *   $    ,     \n");
+
+    gotoxy(x, y + 6);
+    printf("        *   $    .     \n");
+
+    gotoxy(x, y + 7);
+    printf(" ,~     *   $     #     \n");
+
+    gotoxy(x, y + 8);
+    printf(" ,~     *   $     #     \n");
+
+    gotoxy(x, y + 9);
+    printf(" ,~     :   $     #     \n");
+
+    gotoxy(x, y + 10);
+    printf(" ,~     ~. !.     #     \n");
+
+    gotoxy(x, y + 11);
+    printf(" .~     ~, ;     .        \n");
+
+    gotoxy(x, y + 12);
+    printf("  *     .:,-     :.       \n");
+
+    gotoxy(x, y + 13);
+    printf("   #     =;      :\n");
+
+    gotoxy(x, y + 14);
+    printf("   ~-    =,     =\n");
+
+    gotoxy(x, y + 15);
+    printf("    ; . ~.    ,*\n");
+
+    gotoxy(x, y + 16);
+    printf("     .;*,   ;!~\n");
+
+    gotoxy(x, y + 17);
+    printf("        **$,\n");
+
+    gotoxy(x, y + 18);
+    printf("        *   .-\n");
+
+    gotoxy(x, y + 19);
+    printf("       *:    !.\n");
+
+    gotoxy(x, y + 20);
+    printf("    -;-!~   .;;;-;\n");
+
+    gotoxy(x, y + 21);
+    printf("  *#     $@@$     $*\n");
+
+    gotoxy(x, y + 22);
+    printf(" $                 ,.\n");
+
+    gotoxy(x, y + 23);
+    printf(" .                 ~,\n");
+
+    gotoxy(x, y + 24);
+    printf(",                  ,.\n");
+
+    gotoxy(x, y + 25);
+    printf("=                   ,\n");
+}
+
+
+/*
 void display_array(const char art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH], int x, int y) {
     for (int i = 0; i < GIRLFRIEND_HEIGHT; i++) {
         gotoxy(x, y + i);
@@ -260,7 +391,10 @@ void display_array(const char art[GIRLFRIEND_HEIGHT][GIRLFRIEND_WIDTH], int x, i
         printf("\n");
     }
 }
+*/
 
+
+/*
 void girlfriend_back() {
     display_array(girlfriend_back_art, 27, 1);
 }
@@ -268,13 +402,14 @@ void girlfriend_back() {
 void girlfriend_see() {
     display_array(girlfriend_side_art, 27, 1);
 }
+*/
 
 void random() {
-    if (gfSee = 0) {
+    if (gfSee = 0) { // 여친이 보고 있지 않을 때
         srand(time(NULL)); // 함수 실행할 때마다 새로운 난수를 뽑음
         random_function = rand() % 100;
 
-        if (random_function < 20) {  // 숫자 확률로 뒤돌아봄
+        if (random_function < 10) {  // 숫자 확률로 뒤돌아봄
             gfSee = 1;
             girlfriend_see();
 
@@ -296,6 +431,12 @@ void girlFriendTime() {
             gfSee = 0;
         }
     }
+        
+    if (a == 1) {  // 손을 잡고 있는 상태라면
+            badEnd();
+            return;
+    }
+
 }
 
 
@@ -305,6 +446,8 @@ void badEnd() {
     exit(0);
 }
 
+
+/*
 int currentGauge = 0; // 초기 게이지 값
 
 // 게이지 구현
@@ -361,10 +504,9 @@ void loveGauge() {
     Sleep(300); // 게이지 변화 속도를 더 천천히
 
 }
+*/
 
 
-
-int score = 0;  
 
 // 뽀뽀 이벤트 처리 함수
 void handleKissEvent() {
@@ -373,7 +515,7 @@ void handleKissEvent() {
         score++; // 점수 1점 증가
         gotoxy(70, 1);
        // printf("현재 점수: %d\n", score); // 점수 출력
-        Sleep(300); // 중복 입력 방지 대기 시간
+        //Sleep(300); // 중복 입력 방지 대기 시간
     }
     // 키 입력 확인
     if (kbhit()) {
@@ -409,6 +551,7 @@ void End() {
         End1(); // 점수가 16 이상
     }
 }
+
 //미야옹
 // 게임 실행 함수들 //
 void start() { //시작화면
@@ -429,6 +572,7 @@ void start() { //시작화면
     }
     return 0;
 }
+
 //시간 점수 표시
 void Info(int elapsedTime, int score) {
     gotoxy(70, 3); // 시간 표시
@@ -472,16 +616,16 @@ void mainScreen() { //메인게임
         elapsedTime = updateTimeAndGauge(startTime, &currentGauge);
         mainDraw();
         //loveGauge();
-        random();
-        girlFriendTime();
+        random(); // gfSee = 0 일 때만 랜덤으로 gfSee = 1 로 만듦
+        girlFriendTime(); // gfSee = 1 일 때만 변수 gfSee 1씩 늘려 5일 때 gfSee = 0 으로 만듦
+        
         handleKissEvent();
         Info(elapsedTime, score);
 
 
-        Sleep(100);
+        Sleep(700);
 
         a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록
-        drawNotBBO(0.0f, 0.0f, 1.0f);
 
            // 게임 종료 조건
         if (elapsedTime >= GAME_TIME_LIMIT) {
@@ -490,7 +634,6 @@ void mainScreen() { //메인게임
         }
     }
        
-        
     End();
     return 0;
 
