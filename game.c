@@ -408,7 +408,7 @@ void random() {
     if (gfSee == 0) { // 여친이 보고 있지 않을 때
         girlfriend_back();
 
-        srand(time(NULL)); // 함수 실행할 때마다 새로운 난수를 뽑음
+        srand(time(NULL)); // 함수 실행할 때마다 새로운 난수!를 뽑음
         random_function = rand() % 100;
 
         if (random_function < 50) {  // 숫자 확률로 뒤돌아봄
