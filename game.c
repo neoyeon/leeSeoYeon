@@ -1,5 +1,6 @@
 #include "game.h"
 #include "header.h"
+#pragma comment(lib, "winmm.lib") //뽀뽀소리 내려면 필요한 코드
 
 #define SCREEN_WIDTH 100
 #define SCREEN_HEIGHT 40
@@ -214,8 +215,13 @@ void mainDraw() {
         drawNotBBO(); // a가 0일 때 호출
     }
     else if (a == 1) {
+        BBOSound();
         drawBBO();// a가 1일 때 호출
     }
+}
+//뽀뽀소리
+void BBOSound() {
+    PlaySound(TEXT("KissSound.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 // 여자친구 보고 있는 모습
