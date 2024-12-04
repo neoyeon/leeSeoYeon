@@ -121,8 +121,19 @@ void infoDraw() {
 }
 
 
+#include <stdio.h>
+
+#define SCREEN_WIDTH 100
+#define SCREEN_HEIGHT 40
+
 void drawBBO() {
-    
+    int textHeight = 31; // 텍스트의 높이 (대략적인 줄 수)
+    int paddingTop = SCREEN_HEIGHT - textHeight; // 위쪽에 추가할 줄바꿈 개수
+
+    for (int i = 0; i < paddingTop; i++) {
+        printf("\n"); // 위쪽에 빈 줄 추가
+    }
+
     printf(
         "            .;;;;                                                                              \n"
         "          ,=@@@@@@;.                                 .,,,,                                     \n"
@@ -154,8 +165,13 @@ void drawBBO() {
     );
 }
 
-
 void drawNotBBO() {
+    int textHeight = 31; // 텍스트의 높이
+    int paddingTop = SCREEN_HEIGHT - textHeight; // 위쪽에 추가할 줄바꿈 개수
+
+    for (int i = 0; i < paddingTop; i++) {
+        printf("\n"); // 위쪽에 빈 줄 추가
+    }
 
     printf(
         "                 ;;;;.\n"
@@ -186,8 +202,8 @@ void drawNotBBO() {
         "                               *                      !    @@@@@@@@@@@@@@@* \n"
         "                               *   !                       @@@@@@@@@@@@@@@!\n"
     );
-    
 }
+
 
 // 메인 화면 출력 함수
 void mainDraw() {
@@ -205,7 +221,7 @@ void mainDraw() {
 // 여자친구 보고 있는 모습
 void girlfriend_see() {
 
-    int x = 32;
+    int x = 29;
     int y = 0;
 
     gotoxy(x, y);
@@ -274,7 +290,7 @@ void girlfriend_see() {
     gotoxy(x, y + 21);
     printf("  *#     $@@$     $*\n");
 
-    gotoxy(x, y + 22);
+    /*gotoxy(x, y + 22);
     printf(" $                 ,.\n");
 
     gotoxy(x, y + 23);
@@ -284,14 +300,14 @@ void girlfriend_see() {
     printf(",                  ,.\n");
 
     gotoxy(x, y + 25);
-    printf("=                   ,\n");
+    printf("=                   ,\n");*/
 
 }
 
 
 // 여자친구 뒷모습
 void girlfriend_back() {
-    int x = 32;
+    int x = 29;
     int y = 0;
 
     gotoxy(x, y);
@@ -360,7 +376,7 @@ void girlfriend_back() {
     gotoxy(x, y + 21);
     printf("  *#     $@@$     $*\n");
 
-    gotoxy(x, y + 22);
+    /*   gotoxy(x, y + 22);
     printf(" $                 ,.\n");
 
     gotoxy(x, y + 23);
@@ -370,7 +386,7 @@ void girlfriend_back() {
     printf(",                  ,.\n");
 
     gotoxy(x, y + 25);
-    printf("=                   ,\n");
+    printf("=                   ,\n");*/
 }
 
 
@@ -499,14 +515,13 @@ void loveGauge() {
 
 // 뽀뽀 이벤트 처리 함수
 void handleKissEvent() {
-    // 스페이스바가 눌렸는지 확인
-    if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
-        score++; // 점수 1점 증가
-        gotoxy(70, 1);
-       // printf("현재 점수: %d\n", score); // 점수 출력
-        //Sleep(300); // 중복 입력 방지 대기 시간
-    }
+    // 점수 증가
+    score++;
+   // gotoxy(70, 1);
+   // printf("현재 점수: %d\n", score); // 점수 출력
 }
+
+
 
 // 엔딩1
 void End1() {
@@ -537,7 +552,6 @@ void End() {
     }
 }
 
-//미야옹
 // 게임 실행 함수들 //
 void start() { //시작화면
     while (1) {
@@ -604,14 +618,14 @@ void mainScreen() { //메인게임
     while (1)
     {
         elapsedTime = updateTimeAndGauge(startTime, &currentGauge);
-
+        //handleKissEvent();
         a = 0; // 뽀뽀를 한번씩 끊어 할 수 있도록 매번 초기화
-
         // 키 입력 확인
         if (kbhit()) {
             keyControl();
+            handleKissEvent();
         }
-
+        
         mainDraw();
         //loveGauge();
         random(); // gfSee = 0 일 때만 랜덤으로 gfSee = 1 로 만듦
@@ -620,7 +634,8 @@ void mainScreen() { //메인게임
             girlFriendTime(); // gfSee = 1 일 때만 변수 gfSee 1씩 늘려 5일 때 gfSee = 0 으로 만듦
         }
         
-        handleKissEvent();
+        
+
         Info(elapsedTime, score);
 
 
