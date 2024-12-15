@@ -452,7 +452,7 @@ void girlFriendTime() {
 }
 
 void waitAndClear() {
-    Sleep(1000);
+    Sleep(2000);
     system("cls");
 }
 
