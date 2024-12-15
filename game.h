@@ -26,6 +26,7 @@ void girlFriendTime(); // 여자친구가 돌아보고 있는 시간.
 void random();
 void badEnd();
 void BBOSound(void);
+void waitAndClear();
 
 //게임 실행
 void start();
