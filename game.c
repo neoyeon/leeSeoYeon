@@ -583,6 +583,7 @@ void badEnd() {
         "                   ~@@@@@@@~   ,@@@@   ,#@@@@@@@ :@@~  !@@*                      \n"
         "                                       \n"
     );
+    Sleep(5000);
     exit(0);
 }
 
@@ -869,6 +870,7 @@ void End1() {
     
       
     );
+    Sleep(5000);
 
   
 }
@@ -1097,6 +1099,7 @@ void DefaultEnding() {
         "                   ~@@@@@@@~   ,@@@@   ,#@@@@@@@ :@@~  !@@*                      \n"
         "                                       \n"
     );
+    Sleep(5000);
 
 }
 
@@ -1104,7 +1107,7 @@ void End() {
     system("cls"); // 콘솔 화면 지우기
 
     if (score <= 15) {
-        DefaultEnding(); // 점수가 15 이하
+        DefaultEnding();// 점수가 15 이하
     }
     
     else {

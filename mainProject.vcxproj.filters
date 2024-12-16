@@ -42,4 +42,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="KissSound.wav">
+      <Filter>소스 파일</Filter>
+    </Media>
+  </ItemGroup>
 </Project>
